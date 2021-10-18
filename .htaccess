@@ -1,0 +1,21 @@
+#SSL Force - https
+RewriteEngine On 
+RewriteCond %{HTTPS} off 
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+#Force www:
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^example.com [NC]RewriteRule ^(.*)$ https://www.example.com/$1 [L,R=301,NC] 
+
+#Force non-www:
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^www.example.com [NC]
+RewriteRule ^(.*)$ https://example.com/$1 [L,R=301]
+
+#to enforce a no-trailing-slash policy.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R] # <- for test, for prod use [L,R=301]
+
+#To enforce a trailing-slash policy:
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*[^/])$ /$1/ [L,R] # <- for test, for prod use [L,R=301]
